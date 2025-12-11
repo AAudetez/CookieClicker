@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker - Premium Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5e9d9;
+            background-image: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 10c22.1 0 40 17.9 40 40s-17.9 40-40 40S10 72.1 10 50 27.9 10 50 10z" fill="%23d4a76a" opacity="0.2"/></svg>');
+            color: #4b2c20;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 1000px) {
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .cookie-section {
+            background-color: #fff9f0;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.2);
+            border: 5px solid #d4a76a;
+            text-align: center;
+        }
+        
+        .upgrades-section {
+            background-color: #fff9f0;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.2);
+            border: 5px solid #d4a76a;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stats-section {
+            grid-column: 1 / -1;
+            background-color: #fff9f0;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.2);
+            border: 5px solid #d4a76a;
+        }
+        
+        .premium-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.3);
+            border: 5px solid #daa520;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #8b4513;
+            font-size: 3rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #d4a76a;
+        }
+        
+        .premium-title {
+            color: #8b4513;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            color: #a0522d;
+            font-size: 1.2rem;
+        }
+        
+        .cookie-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .cookie {
+            width: 250px;
+            height: 250px;
+            background-color: #d4a76a;
+            border-radius: 50%;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+            border: 10px solid #b8860b;
+            overflow: hidden;
+        }
+        
+        .cookie:hover {
+            transform: scale(1.05);
+        }
+        
+        .cookie:active {
+            transform: scale(0.95);
+        }
+        
+        .cookie-chocolate {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #4b2c20;
+            border-radius: 50%;
+        }
+        
+        .cookie-count {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #8b4513;
+            margin: 15px 0;
+            text-shadow: 1px 1px 0 #d4a76a;
+        }
+        
+        .cookies-per-second {
+            font-size: 1.3rem;
+            color: #a0522d;
+            margin-bottom: 10px;
+        }
+        
+        .cookies-per-click {
+            font-size: 1.3rem;
+            color: #a0522d;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .big-cookie-text {
+            font-size: 1.5rem;
+            color: #8b4513;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .upgrade-category {
+            margin-bottom: 25px;
+        }
+        
+        .category-title {
+            background-color: #d4a76a;
+            padding: 10px;
+            border-radius: 10px;
+            color: #4b2c20;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .upgrade-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .upgrade-item {
+            background-color: #f5e9d9;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #d4a76a;
+            transition: all 0.2s;
+        }
+        
+        .upgrade-item:hover {
+            background-color: #f0dfc8;
+            transform: translateY(-3px);
+        }
+        
+        .upgrade-item.unlocked {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .upgrade-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .upgrade-info {
+            flex-grow: 1;
+        }
+        
+        .upgrade-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #8b4513;
+        }
+        
+        .upgrade-description {
+            color: #a0522d;
+            font-size: 0.9rem;
+            margin-top: 3px;
+        }
+        
+        .upgrade-cost {
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        
+        .upgrade-button {
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            margin-left: 10px;
+        }
+        
+        .upgrade-button:hover {
+            background-color: #a0522d;
+        }
+        
+        .upgrade-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-box {
+            background-color: #f5e9d9;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #d4a76a;
+            text-align: center;
+        }
+        
+        .stat-title {
+            font-size: 1rem;
+            color: #a0522d;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        .achievements-section {
+            margin-top: 25px;
+        }
+        
+        .achievements-title {
+            background-color: #d4a76a;
+            padding: 10px;
+            border-radius: 10px;
+            color: #4b2c20;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .achievements-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .achievement {
+            background-color: #f5e9d9;
+            border-radius: 10px;
+            padding: 10px;
+            border: 2px solid #d4a76a;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+        
+        .achievement.unlocked {
+            opacity: 1;
+            border-color: #ffd700;
+            background-color: #fffacd;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-name {
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        .achievement-desc {
+            font-size: 0.8rem;
+            color: #a0522d;
+            margin-top: 3px;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .save-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .save-button, .reset-button {
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .save-button:hover, .reset-button:hover {
+            background-color: #a0522d;
+            transform: translateY(-3px);
+        }
+        
+        .reset-button {
+            background-color: #d9534f;
+        }
+        
+        .reset-button:hover {
+            background-color: #c9302c;
+        }
+        
+        /* Cookie chocolate chip positions */
+        .chocolate-1 { top: 30%; left: 30%; }
+        .chocolate-2 { top: 60%; left: 20%; }
+        .chocolate-3 { top: 40%; left: 60%; }
+        .chocolate-4 { top: 70%; left: 70%; }
+        .chocolate-5 { top: 20%; left: 50%; }
+        .chocolate-6 { top: 50%; left: 40%; }
+        .chocolate-7 { top: 65%; left: 45%; }
+        .chocolate-8 { top: 35%; left: 75%; }
+        
+        /* Animation for cookie click */
+        @keyframes clickAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        .cookie-click {
+            animation: clickAnimation 0.1s;
+        }
+        
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .click-power-indicator {
+            background-color: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .click-power-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .click-multiplier {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        /* Premium Shop Styles */
+        .premium-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid #daa520;
+        }
+        
+        .gem-balance {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        .gem-icon {
+            color: #ffd700;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .premium-shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .premium-item {
+            background: linear-gradient(135deg, #fff9f0, #fff0d6);
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #daa520;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .premium-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .premium-item.featured {
+            background: linear-gradient(135deg, #ffedcc, #ffdd99);
+            border-color: #ff9900;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-item.featured::before {
+            content: "BEST VALUE";
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: #ff9900;
+            color: white;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .premium-icon {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .premium-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+        
+        .premium-description {
+            color: #a0522d;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+        
+        .premium-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .buy-premium-btn {
+            background: linear-gradient(to right, #ffd700, #ff9900);
+            color: #8b4513;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .buy-premium-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+        }
+        
+        .buy-premium-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .gem-packs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .gem-pack {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #ffd700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .gem-pack:hover {
+            background: #fff9e6;
+            transform: translateY(-3px);
+        }
+        
+        .gem-pack.featured {
+            border-color: #ff9900;
+            background: #fff4e6;
+        }
+        
+        .gem-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        .gem-price {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .gem-bonus {
+            color: #ff9900;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .ad-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 3px solid #2196f3;
+            text-align: center;
+        }
+        
+        .ad-button {
+            background: linear-gradient(to right, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .ad-button:hover {
+            background: linear-gradient(to right, #1976d2, #1565c0);
+            transform: scale(1.02);
+        }
+        
+        .ad-reward {
+            font-size: 1.2rem;
+            color: #1976d2;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .active-boosts {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 2px solid #4caf50;
+        }
+        
+        .boost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #4caf50;
+        }
+        
+        .boost-time {
+            font-weight: bold;
+            color: #4caf50;
+        }
+        
+        /* Special effects for premium */
+        .golden-cookie {
+            animation: goldenGlow 2s infinite alternate;
+        }
+        
+        @keyframes goldenGlow {
+            from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+        }
+        
+        .premium-notification {
+            animation: premiumPulse 1s infinite alternate;
+        }
+        
+        @keyframes premiumPulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        
+        /* Super click animation */
+        @keyframes superClickAnimation {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+            50% { transform: scale(0.85); box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="cookie-section">
+            <div class="header">
+                <h1><i class="fas fa-cookie-bite"></i> Cookie Clicker</h1>
+                <p class="subtitle">Click the cookie to bake cookies and buy upgrades!</p>
+            </div>
+            
+            <div class="cookie-container">
+                <div class="cookie" id="cookie">
+                    <div class="cookie-chocolate chocolate-1"></div>
+                    <div class="cookie-chocolate chocolate-2"></div>
+                    <div class="cookie-chocolate chocolate-3"></div>
+                    <div class="cookie-chocolate chocolate-4"></div>
+                    <div class="cookie-chocolate chocolate-5"></div>
+                    <div class="cookie-chocolate chocolate-6"></div>
+                    <div class="cookie-chocolate chocolate-7"></div>
+                    <div class="cookie-chocolate chocolate-8"></div>
+                </div>
+            </div>
+            
+            <div class="cookie-count" id="cookie-count">0</div>
+            <div class="cookies-per-second" id="cookies-per-second">0 cookies per second</div>
+            <div class="cookies-per-click" id="cookies-per-click">1 cookie per click</div>
+            <p class="big-cookie-text">Click the cookie to bake!</p>
+            
+            <div class="click-power-indicator">
+                <div class="stat-title">Current Click Power</div>
+                <div class="click-power-value" id="click-power-value">1x</div>
+                <div class="stat-title">Each click gives you <span id="cookies-per-click-value">1</span> cookies!</div>
+            </div>
+        </div>
+        
+        <div class="upgrades-section">
+            <div class="upgrades-grid">
+                <div class="upgrade-category">
+                    <div class="category-title">Click Power Upgrades</div>
+                    <div class="upgrade-list" id="click-upgrades">
+                        <!-- Click power upgrades will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="upgrade-category">
+                    <div class="category-title">Cursor Upgrades</div>
+                    <div class="upgrade-list" id="cursor-upgrades">
+                        <!-- Cursor upgrades will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="upgrade-category">
+                    <div class="category-title">Grandma Upgrades</div>
+                    <div class="upgrade-list" id="grandma-upgrades">
+                        <!-- Grandma upgrades will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="upgrade-category">
+                    <div class="category-title">Farm Upgrades</div>
+                    <div class="upgrade-list" id="farm-upgrades">
+                        <!-- Farm upgrades will be added here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-section">
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-title">Cookies Clicked</div>
+                    <div class="stat-value" id="cookies-clicked">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">Total Cookies Baked</div>
+                    <div class="stat-value" id="total-cookies">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">Time Played</div>
+                    <div class="stat-value" id="time-played">0s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">Upgrades Owned</div>
+                    <div class="stat-value" id="upgrades-owned">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">Click Multiplier</div>
+                    <div class="stat-value" id="click-multiplier">1x</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">Total CPS</div>
+                    <div class="stat-value" id="total-cps">0</div>
+                </div>
+            </div>
+            
+            <div class="achievements-section">
+                <div class="achievements-title">Achievements</div>
+                <div class="achievements-list" id="achievements-list">
+                    <!-- Achievements will be added here by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="save-buttons">
+                <button class="save-button" id="save-button">
+                    <i class="fas fa-save"></i> Save Game
+                </button>
+                <button class="reset-button" id="reset-button">
+                    <i class="fas fa-redo"></i> Reset Game
+                </button>
+            </div>
+        </div>
+        
+        <!-- PREMIUM SECTION -->
+        <div class="premium-section">
+            <div class="premium-header">
+                <h2 class="premium-title"><i class="fas fa-crown"></i> Premium Shop</h2>
+                <div class="gem-balance">
+                    <i class="fas fa-gem gem-icon"></i>
+                    <span id="gem-count">0</span> Gems
+                </div>
+            </div>
+            
+            <div class="active-boosts" id="active-boosts" style="display: none;">
+                <h3><i class="fas fa-bolt"></i> Active Boosts</h3>
+                <div id="boosts-list"></div>
+            </div>
+            
+            <div class="premium-shop-grid">
+                <div class="premium-item">
+                    <div class="premium-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="premium-name">Golden Clicker</div>
+                    <div class="premium-description">Triple your click power for 1 hour! Click the cookie to earn 3x more cookies per click.</div>
+                    <div class="premium-price"><i class="fas fa-gem"></i> 25 Gems</div>
+                    <button class="buy-premium-btn" onclick="buyGoldenClicker()">
+                        <i class="fas fa-shopping-cart"></i> Buy Now
+                    </button>
+                </div>
+                
+                <div class="premium-item">
+                    <div class="premium-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="premium-name">Cookie Factory</div>
+                    <div class="premium-description">Double your cookie production for 2 hours! All upgrades produce 2x more cookies.</div>
+                    <div class="premium-price"><i class="fas fa-gem"></i> 50 Gems</div>
+                    <button class="buy-premium-btn" onclick="buyCookieFactory()">
+                        <i class="fas fa-shopping-cart"></i> Buy Now
+                    </button>
+                </div>
+                
+                <div class="premium-item featured">
+                    <div class="premium-icon"><i class="fas fa-robot"></i></div>
+                    <div class="premium-name">Auto-Clicker</div>
+                    <div class="premium-description">Automatically clicks the cookie 5 times per second for you! Works for 30 minutes.</div>
+                    <div class="premium-price"><i class="fas fa-gem"></i> 75 Gems</div>
+                    <button class="buy-premium-btn" onclick="buyAutoClicker()">
+                        <i class="fas fa-shopping-cart"></i> Buy Now
+                    </button>
+                </div>
+                
+                <div class="premium-item">
+                    <div class="premium-icon"><i class="fas fa-infinity"></i></div>
+                    <div class="premium-name">Unlimited Bundle</div>
+                    <div class="premium-description">Get ALL premium features permanently! Includes Golden Cookie skin and special effects.</div>
+                    <div class="premium-price"><i class="fas fa-gem"></i> 500 Gems</div>
+                    <button class="buy-premium-btn" onclick="buyUnlimitedBundle()">
+                        <i class="fas fa-crown"></i> Buy Bundle
+                    </button>
+                </div>
+            </div>
+            
+            <div class="gem-packs">
+                <div class="gem-pack" onclick="showPurchaseModal('small')">
+                    <div class="gem-amount">25 Gems</div>
+                    <div class="gem-price">$0.99</div>
+                    <div class="gem-bonus">Starter Pack</div>
+                </div>
+                
+                <div class="gem-pack" onclick="showPurchaseModal('medium')">
+                    <div class="gem-amount">100 Gems</div>
+                    <div class="gem-price">$2.99</div>
+                    <div class="gem-bonus">+10 Bonus Gems!</div>
+                </div>
+                
+                <div class="gem-pack featured" onclick="showPurchaseModal('large')">
+                    <div class="gem-amount">250 Gems</div>
+                    <div class="gem-price">$6.99</div>
+                    <div class="gem-bonus">+50 Bonus Gems!</div>
+                </div>
+                
+                <div class="gem-pack" onclick="showPurchaseModal('xlarge')">
+                    <div class="gem-amount">500 Gems</div>
+                    <div class="gem-price">$9.99</div>
+                    <div class="gem-bonus">+150 Bonus Gems!</div>
+                </div>
+            </div>
+            
+            <div class="ad-section">
+                <h3><i class="fas fa-ad"></i> Watch Ad for Free Gems!</h3>
+                <p>Watch a short advertisement to earn free gems! No purchase necessary.</p>
+                <button class="ad-button" onclick="watchAdForGems()">
+                    <i class="fas fa-play-circle"></i> Watch Ad & Get 5 Free Gems
+                </button>
+                <div class="ad-reward">Reward: 5 Gems per ad (Max 10 per day)</div>
+                <div id="ads-today">Ads watched today: 0/10</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchase-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 20px; max-width: 500px; text-align: center;">
+            <h2 id="modal-title">Purchase Gems</h2>
+            <p id="modal-description">You're about to purchase gems for real money.</p>
+            <div style="font-size: 2rem; margin: 20px 0; color: #8b4513;">
+                <i class="fas fa-gem"></i> <span id="modal-gems">0</span> Gems
+            </div>
+            <div style="font-size: 1.5rem; margin: 20px 0; color: #2e7d32;">
+                Price: $<span id="modal-price">0.00</span>
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <button onclick="processPurchase()" style="background: #4caf50; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">
+                    <i class="fas fa-check"></i> Confirm Purchase
+                </button>
+                <button onclick="closeModal()" style="background: #d9534f; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">
+                This is a simulated purchase. In a real game, this would connect to a payment processor.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // =====================
+        // GAME STATE & VARIABLES
+        // =====================
+        let cookies = 0;
+        let totalCookies = 0;
+        let cookiesClicked = 0;
+        let cookiesPerSecond = 0;
+        let cookiesPerClick = 1;
+        let clickMultiplier = 1;
+        let startTime = Date.now();
+        let upgradesOwned = 0;
+        
+        // Premium currency system
+        let gems = 0;
+        let adsWatchedToday = 0;
+        const maxAdsPerDay = 10;
+        let activeBoosts = [];
+        let hasUnlimitedBundle = false;
+        
+        // Upgrades data
+        const upgrades = {
+            click: [
+                { id: 1, name: "Better Oven Mitts", description: "Get 2 cookies per click", baseCost: 50, baseMultiplier: 2, owned: 0 },
+                { id: 2, name: "Cookie Gloves", description: "Get 5 cookies per click", baseCost: 200, baseMultiplier: 5, owned: 0 },
+                { id: 3, name: "Golden Cookie Spoon", description: "Get 10 cookies per click", baseCost: 1000, baseMultiplier: 10, owned: 0 },
+                { id: 4, name: "Diamond Cookie Cutter", description: "Get 25 cookies per click", baseCost: 5000, baseMultiplier: 25, owned: 0 },
+                { id: 5, name: "Platinum Baking Sheet", description: "Get 50 cookies per click", baseCost: 20000, baseMultiplier: 50, owned: 0 },
+                { id: 6, name: "Cookie Magic Wand", description: "Get 100 cookies per click", baseCost: 100000, baseMultiplier: 100, owned: 0 },
+                { id: 7, name: "Cookie God Hand", description: "Get 500 cookies per click", baseCost: 1000000, baseMultiplier: 500, owned: 0 }
+            ],
+            cursor: [
+                { id: 8, name: "Reinforced Index Finger", description: "Cursor produces 0.1 cookies per second", baseCost: 15, baseCps: 0.1, owned: 0 },
+                { id: 9, name: "Carpal Tunnel Prevention", description: "Cursor produces 0.5 cookies per second", baseCost: 100, baseCps: 0.5, owned: 0 },
+                { id: 10, name: "Ambidextrous", description: "Cursor produces 2 cookies per second", baseCost: 500, baseCps: 2, owned: 0 },
+                { id: 11, name: "Million Fingers", description: "Cursor produces 10 cookies per second", baseCost: 10000, baseCps: 10, owned: 0 }
+            ],
+            grandma: [
+                { id: 12, name: "Grandma", description: "A nice grandma to bake cookies", baseCost: 100, baseCps: 1, owned: 0 },
+                { id: 13, name: "Oven", description: "Grandmas bake twice as fast", baseCost: 500, baseCps: 2, owned: 0 },
+                { id: 14, name: "Kitchen", description: "Grandmas bake 5 cookies per second", baseCost: 5000, baseCps: 5, owned: 0 },
+                { id: 15, name: "Factory", description: "Grandmas bake 25 cookies per second", baseCost: 50000, baseCps: 25, owned: 0 }
+            ],
+            farm: [
+                { id: 16, name: "Farm", description: "Grows cookie plants", baseCost: 1100, baseCps: 8, owned: 0 },
+                { id: 17, name: "Mine", description: "Mines cookie dough and chocolate chips", baseCost: 12000, baseCps: 47, owned: 0 },
+                { id: 18, name: "Shipment", description: "Brings cookies from the cookie planet", baseCost: 130000, baseCps: 260, owned: 0 },
+                { id: 19, name: "Alchemy Lab", description: "Turns gold into cookies", baseCost: 1400000, baseCps: 1400, owned: 0 }
+            ]
+        };
+        
+        // Achievements data
+        const achievements = [
+            { id: 1, name: "First Click", description: "Click the cookie for the first time", icon: "fas fa-mouse-pointer", unlocked: false, condition: () => cookiesClicked >= 1 },
+            { id: 2, name: "Making Dough", description: "Bake 100 cookies", icon: "fas fa-cookie", unlocked: false, condition: () => totalCookies >= 100 },
+            { id: 3, name: "Cookie Tycoon", description: "Bake 1,000 cookies", icon: "fas fa-crown", unlocked: false, condition: () => totalCookies >= 1000 },
+            { id: 4, name: "Cookie Empire", description: "Bake 10,000 cookies", icon: "fas fa-chess-queen", unlocked: false, condition: () => totalCookies >= 10000 },
+            { id: 5, name: "Upgrade Collector", description: "Buy 5 upgrades", icon: "fas fa-shopping-cart", unlocked: false, condition: () => upgradesOwned >= 5 },
+            { id: 6, name: "Grandma Army", description: "Own 10 grandmas", icon: "fas fa-user-friends", unlocked: false, condition: () => upgrades.grandma.reduce((sum, g) => sum + g.owned, 0) >= 10 },
+            { id: 7, name: "Cookie Millionaire", description: "Bake 1,000,000 cookies", icon: "fas fa-money-bill-wave", unlocked: false, condition: () => totalCookies >= 1000000 },
+            { id: 8, name: "Speed Baker", description: "Reach 100 cookies per second", icon: "fas fa-tachometer-alt", unlocked: false, condition: () => cookiesPerSecond >= 100 },
+            { id: 9, name: "Power Clicker", description: "Reach 10 cookies per click", icon: "fas fa-hand-rock", unlocked: false, condition: () => cookiesPerClick >= 10 },
+            { id: 10, name: "Mega Clicker", description: "Reach 100 cookies per click", icon: "fas fa-fist-raised", unlocked: false, condition: () => cookiesPerClick >= 100 },
+            { id: 11, name: "Ultra Clicker", description: "Reach 500 cookies per click", icon: "fas fa-bolt", unlocked: false, condition: () => cookiesPerClick >= 500 },
+            { id: 12, name: "Premium Player", description: "Buy your first gem pack", icon: "fas fa-gem", unlocked: false, condition: () => gems > 0 }
+        ];
+        
+        // Gem packages for purchase
+        const gemPackages = {
+            small: { gems: 25, price: 0.99, bonus: 0 },
+            medium: { gems: 100, price: 2.99, bonus: 10 },
+            large: { gems: 250, price: 6.99, bonus: 50 },
+            xlarge: { gems: 500, price: 9.99, bonus: 150 }
+        };
+        
+        // DOM elements
+        const cookieElement = document.getElementById('cookie');
+        const cookieCountElement = document.getElementById('cookie-count');
+        const cookiesPerSecondElement = document.getElementById('cookies-per-second');
+        const cookiesPerClickElement = document.getElementById('cookies-per-click');
+        const cookiesPerClickValueElement = document.getElementById('cookies-per-click-value');
+        const cookiesClickedElement = document.getElementById('cookies-clicked');
+        const totalCookiesElement = document.getElementById('total-cookies');
+        const timePlayedElement = document.getElementById('time-played');
+        const upgradesOwnedElement = document.getElementById('upgrades-owned');
+        const clickMultiplierElement = document.getElementById('click-multiplier');
+        const clickPowerValueElement = document.getElementById('click-power-value');
+        const totalCpsElement = document.getElementById('total-cps');
+        const gemCountElement = document.getElementById('gem-count');
+        const activeBoostsElement = document.getElementById('active-boosts');
+        const boostsListElement = document.getElementById('boosts-list');
+        const adsTodayElement = document.getElementById('ads-today');
+        
+        const clickUpgradesElement = document.getElementById('click-upgrades');
+        const cursorUpgradesElement = document.getElementById('cursor-upgrades');
+        const grandmaUpgradesElement = document.getElementById('grandma-upgrades');
+        const farmUpgradesElement = document.getElementById('farm-upgrades');
+        
+        const achievementsListElement = document.getElementById('achievements-list');
+        const saveButton = document.getElementById('save-button');
+        const resetButton = document.getElementById('reset-button');
+        
+        // =====================
+        // INITIALIZATION
+        // =====================
+        function initGame() {
+            loadGame();
+            renderUpgrades();
+            renderAchievements();
+            updatePremiumDisplay();
+            gameLoop();
+            setInterval(saveGame, 30000);
+            
+            // Add auto-clicker if active
+            if (activeBoosts.some(boost => boost.type === 'auto-clicker')) {
+                startAutoClicker();
+            }
+            
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('upgrade-button') && !event.target.disabled) {
+                    const category = event.target.dataset.category;
+                    const id = parseInt(event.target.dataset.id);
+                    buyUpgrade(category, id, event);
+                }
+            });
+        }
+        
+        // =====================
+        // GAME LOOP
+        // =====================
+        function gameLoop() {
+            calculateCPS();
+            calculateClickPower();
+            
+            cookies += cookiesPerSecond / 10;
+            totalCookies += cookiesPerSecond / 10;
+            
+            updateDisplay();
+            checkAchievements();
+            updateActiveBoosts();
+            
+            setTimeout(gameLoop, 100);
+        }
+        
+        // =====================
+        // CALCULATION FUNCTIONS
+        // =====================
+        function calculateCPS() {
+            let cps = 0;
+            let multiplier = 1;
+            
+            // Apply cookie factory boost if active
+            const factoryBoost = activeBoosts.find(boost => boost.type === 'cookie-factory');
+            if (factoryBoost) {
+                multiplier *= 2;
+            }
+            
+            // Apply unlimited bundle boost
+            if (hasUnlimitedBundle) {
+                multiplier *= 1.5;
+            }
+            
+            for (const category of ['cursor', 'grandma', 'farm']) {
+                upgrades[category].forEach(upgrade => {
+                    cps += upgrade.owned * upgrade.baseCps * multiplier;
+                });
+            }
+            
+            cookiesPerSecond = cps;
+        }
+        
+        function calculateClickPower() {
+            let multiplier = 1;
+            
+            upgrades.click.forEach(upgrade => {
+                if (upgrade.owned > 0) {
+                    multiplier = upgrade.baseMultiplier;
+                }
+            });
+            
+            // Apply golden clicker boost if active
+            const goldenBoost = activeBoosts.find(boost => boost.type === 'golden-clicker');
+            if (goldenBoost) {
+                multiplier *= 3;
+            }
+            
+            // Apply unlimited bundle boost
+            if (hasUnlimitedBundle) {
+                multiplier *= 2;
+            }
+            
+            clickMultiplier = multiplier;
+            cookiesPerClick = multiplier;
+        }
+        
+        // =====================
+        // DISPLAY FUNCTIONS
+        // =====================
+        function updateDisplay() {
+            cookieCountElement.textContent = formatNumber(cookies);
+            cookiesPerSecondElement.textContent = `${formatNumber(cookiesPerSecond)} cookies per second`;
+            cookiesPerClickElement.textContent = `${formatNumber(cookiesPerClick)} cookies per click`;
+            cookiesPerClickValueElement.textContent = formatNumber(cookiesPerClick);
+            cookiesClickedElement.textContent = formatNumber(cookiesClicked);
+            totalCookiesElement.textContent = formatNumber(totalCookies);
+            upgradesOwnedElement.textContent = upgradesOwned;
+            clickMultiplierElement.textContent = `${clickMultiplier}x`;
+            clickPowerValueElement.textContent = `${clickMultiplier}x`;
+            totalCpsElement.textContent = formatNumber(cookiesPerSecond);
+            
+            const seconds = Math.floor((Date.now() - startTime) / 1000);
+            timePlayedElement.textContent = `${formatTime(seconds)}`;
+            
+            renderUpgrades();
+        }
+        
+        function updatePremiumDisplay() {
+            gemCountElement.textContent = gems;
+            adsTodayElement.textContent = `Ads watched today: ${adsWatchedToday}/${maxAdsPerDay}`;
+            
+            // Show/hide active boosts section
+            if (activeBoosts.length > 0) {
+                activeBoostsElement.style.display = 'block';
+            } else {
+                activeBoostsElement.style.display = 'none';
+            }
+            
+            // Update premium buttons based on gem balance
+            updatePremiumButtons();
+        }
+        
+        function updatePremiumButtons() {
+            // This function would update button states based on gem balance
+            // For now, we'll just update the display
+        }
+        
+        function updateActiveBoosts() {
+            boostsListElement.innerHTML = '';
+            const now = Date.now();
+            
+            // Filter expired boosts
+            activeBoosts = activeBoosts.filter(boost => boost.endTime > now);
+            
+            activeBoosts.forEach(boost => {
+                const timeLeft = Math.max(0, Math.floor((boost.endTime - now) / 1000));
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                const boostElement = document.createElement('div');
+                boostElement.className = 'boost-item';
+                boostElement.innerHTML = `
+                    <div>
+                        <strong>${boost.name}</strong><br>
+                        <small>${boost.description}</small>
+                    </div>
+                    <div class="boost-time">${minutes}m ${seconds}s</div>
+                `;
+                boostsListElement.appendChild(boostElement);
+            });
+        }
+        
+        // =====================
+        // PREMIUM FUNCTIONS
+        // =====================
+        function buyGoldenClicker() {
+            if (gems >= 25) {
+                gems -= 25;
+                addBoost('golden-clicker', 'Golden Clicker', '3x click power', 60 * 60 * 1000); // 1 hour
+                showNotification('Golden Clicker activated for 1 hour!', 'premium');
+                updatePremiumDisplay();
+            } else {
+                showNotification('Not enough gems! Buy more gems in the shop.', 'error');
+            }
+        }
+        
+        function buyCookieFactory() {
+            if (gems >= 50) {
+                gems -= 50;
+                addBoost('cookie-factory', 'Cookie Factory', '2x cookie production', 2 * 60 * 60 * 1000); // 2 hours
+                showNotification('Cookie Factory activated for 2 hours!', 'premium');
+                updatePremiumDisplay();
+            } else {
+                showNotification('Not enough gems! Buy more gems in the shop.', 'error');
+            }
+        }
+        
+        function buyAutoClicker() {
+            if (gems >= 75) {
+                gems -= 75;
+                addBoost('auto-clicker', 'Auto-Clicker', 'Auto-clicks 5 times/sec', 30 * 60 * 1000); // 30 minutes
+                startAutoClicker();
+                showNotification('Auto-Clicker activated for 30 minutes!', 'premium');
+                updatePremiumDisplay();
+            } else {
+                showNotification('Not enough gems! Buy more gems in the shop.', 'error');
+            }
+        }
+        
+        function buyUnlimitedBundle() {
+            if (gems >= 500) {
+                gems -= 500;
+                hasUnlimitedBundle = true;
+                cookieElement.classList.add('golden-cookie');
+                showNotification('Unlimited Bundle activated! Enjoy premium features forever!', 'premium');
+                updatePremiumDisplay();
+                
+                // Achievement for buying unlimited bundle
+                if (!achievements[12].unlocked) {
+                    achievements[12].unlocked = true;
+                    renderAchievements();
+                    showNotification('Achievement Unlocked: Premium Player!');
+                }
+            } else {
+                showNotification('Not enough gems! You need 500 gems for this bundle.', 'error');
+            }
+        }
+        
+        function addBoost(type, name, description, duration) {
+            const boost = {
+                type,
+                name,
+                description,
+                startTime: Date.now(),
+                endTime: Date.now() + duration
+            };
+            
+            activeBoosts.push(boost);
+            updateActiveBoosts();
+        }
+        
+        function startAutoClicker() {
+            const autoClickerBoost = activeBoosts.find(boost => boost.type === 'auto-clicker');
+            if (autoClickerBoost) {
+                const interval = setInterval(() => {
+                    if (!activeBoosts.some(boost => boost.type === 'auto-clicker')) {
+                        clearInterval(interval);
+                        return;
+                    }
+                    
+                    // Simulate a cookie click
+                    cookies += cookiesPerClick;
+                    totalCookies += cookiesPerClick;
+                    cookiesClicked++;
+                    
+                    // Create particles at random positions
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createParticleEffect(x, y);
+                    
+                    updateDisplay();
+                }, 200); // 5 clicks per second
+                
+                // Store interval ID to clear later
+                autoClickerBoost.intervalId = interval;
+            }
+        }
+        
+        // =====================
+        // PURCHASE SYSTEM
+        // =====================
+        let currentPurchase = null;
+        
+        function showPurchaseModal(packageSize) {
+            const pack = gemPackages[packageSize];
+            currentPurchase = packageSize;
+            
+            document.getElementById('modal-title').textContent = `Buy ${pack.gems} Gems`;
+            document.getElementById('modal-description').textContent = `Get ${pack.gems} gems${pack.bonus > 0 ? ` + ${pack.bonus} bonus gems` : ''} for your cookie adventure!`;
+            document.getElementById('modal-gems').textContent = pack.gems + pack.bonus;
+            document.getElementById('modal-price').textContent = pack.price.toFixed(2);
+            
+            document.getElementById('purchase-modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('purchase-modal').style.display = 'none';
+            currentPurchase = null;
+        }
+        
+        function processPurchase() {
+            if (!currentPurchase) return;
+            
+            const pack = gemPackages[currentPurchase];
+            const totalGems = pack.gems + pack.bonus;
+            
+            // Simulate successful purchase
+            gems += totalGems;
+            
+            // In a real game, here you would:
+            // 1. Connect to payment processor (Stripe, PayPal, etc.)
+            // 2. Verify payment
+            // 3. Only then add gems
+            
+            showNotification(`Success! ${totalGems} gems added to your account!`, 'premium');
+            updatePremiumDisplay();
+            closeModal();
+            
+            // Achievement for first purchase
+            if (!achievements[12].unlocked) {
+                achievements[12].unlocked = true;
+                renderAchievements();
+                showNotification('Achievement Unlocked: Premium Player!');
+            }
+            
+            // Track purchase (in real game, send to analytics)
+            console.log(`Purchase simulated: ${pack.gems} gems for $${pack.price}`);
+        }
+        
+        function watchAdForGems() {
+            if (adsWatchedToday >= maxAdsPerDay) {
+                showNotification('Maximum ads reached for today. Come back tomorrow!', 'info');
+                return;
+            }
+            
+            // Simulate watching an ad
+            showNotification('Loading advertisement...', 'info');
+            
+            setTimeout(() => {
+                // Simulate ad completion
+                gems += 5;
+                adsWatchedToday++;
+                updatePremiumDisplay();
+                showNotification('Ad completed! 5 gems added to your balance!', 'premium');
+            }, 2000); // Simulate 2 second ad
+        }
+        
+        // =====================
+        // ORIGINAL GAME FUNCTIONS
+        // =====================
+        function renderUpgrades() {
+            // ... (same as before, kept for brevity)
+            clickUpgradesElement.innerHTML = '';
+            cursorUpgradesElement.innerHTML = '';
+            grandmaUpgradesElement.innerHTML = '';
+            farmUpgradesElement.innerHTML = '';
+            
+            upgrades.click.forEach(upgrade => {
+                const cost = calculateUpgradeCost(upgrade);
+                const canAfford = cookies >= cost;
+                const isOwned = upgrade.owned > 0;
+                
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-item ${isOwned ? 'unlocked' : ''} ${!canAfford && !isOwned ? 'disabled' : ''}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">${upgrade.name} ${isOwned ? '(✓)' : ''}</div>
+                        <div class="upgrade-description">${upgrade.description}</div>
+                    </div>
+                    <div class="upgrade-cost">${formatNumber(cost)} cookies</div>
+                    <button class="upgrade-button" ${!canAfford ? 'disabled' : ''} data-category="click" data-id="${upgrade.id}">${isOwned ? 'Owned' : 'Buy'}</button>
+                `;
+                clickUpgradesElement.appendChild(upgradeElement);
+            });
+            
+            upgrades.cursor.forEach(upgrade => {
+                const cost = calculateUpgradeCost(upgrade);
+                const canAfford = cookies >= cost;
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-item ${upgrade.owned > 0 ? 'unlocked' : ''} ${!canAfford ? 'disabled' : ''}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">${upgrade.name} (${upgrade.owned})</div>
+                        <div class="upgrade-description">${upgrade.description}</div>
+                    </div>
+                    <div class="upgrade-cost">${formatNumber(cost)} cookies</div>
+                    <button class="upgrade-button" ${!canAfford ? 'disabled' : ''} data-category="cursor" data-id="${upgrade.id}">Buy</button>
+                `;
+                cursorUpgradesElement.appendChild(upgradeElement);
+            });
+            
+            upgrades.grandma.forEach(upgrade => {
+                const cost = calculateUpgradeCost(upgrade);
+                const canAfford = cookies >= cost;
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-item ${upgrade.owned > 0 ? 'unlocked' : ''} ${!canAfford ? 'disabled' : ''}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">${upgrade.name} (${upgrade.owned})</div>
+                        <div class="upgrade-description">${upgrade.description}</div>
+                    </div>
+                    <div class="upgrade-cost">${formatNumber(cost)} cookies</div>
+                    <button class="upgrade-button" ${!canAfford ? 'disabled' : ''} data-category="grandma" data-id="${upgrade.id}">Buy</button>
+                `;
+                grandmaUpgradesElement.appendChild(upgradeElement);
+            });
+            
+            upgrades.farm.forEach(upgrade => {
+                const cost = calculateUpgradeCost(upgrade);
+                const canAfford = cookies >= cost;
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-item ${upgrade.owned > 0 ? 'unlocked' : ''} ${!canAfford ? 'disabled' : ''}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">${upgrade.name} (${upgrade.owned})</div>
+                        <div class="upgrade-description">${upgrade.description}</div>
+                    </div>
+                    <div class="upgrade-cost">${formatNumber(cost)} cookies</div>
+                    <button class="upgrade-button" ${!canAfford ? 'disabled' : ''} data-category="farm" data-id="${upgrade.id}">Buy</button>
+                `;
+                farmUpgradesElement.appendChild(upgradeElement);
+            });
+        }
+        
+        function calculateUpgradeCost(upgrade) {
+            if (upgrade.id <= 7) return upgrade.baseCost;
+            return Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
+        }
+        
+        function buyUpgrade(category, id, event) {
+            const upgrade = upgrades[category].find(u => u.id === id);
+            if (!upgrade) return;
+            
+            const cost = calculateUpgradeCost(upgrade);
+            if (cookies >= cost) {
+                cookies -= cost;
+                
+                if (category === 'click' && upgrade.owned === 0) {
+                    upgrade.owned = 1;
+                    upgradesOwned++;
+                    calculateClickPower();
+                } else if (category !== 'click') {
+                    upgrade.owned++;
+                    upgradesOwned++;
+                }
+                
+                renderUpgrades();
+                updateDisplay();
+                
+                if (event) createParticleEffect(event.clientX, event.clientY);
+                showNotification(`Purchased: ${upgrade.name}!`);
+            }
+        }
+        
+        function renderAchievements() {
+            achievementsListElement.innerHTML = '';
+            achievements.forEach(achievement => {
+                const achievementElement = document.createElement('div');
+                achievementElement.className = `achievement ${achievement.unlocked ? 'unlocked' : ''}`;
+                achievementElement.innerHTML = `
+                    <div class="achievement-icon">
+                        <i class="${achievement.icon}"></i>
+                    </div>
+                    <div class="achievement-name">${achievement.name}</div>
+                    <div class="achievement-desc">${achievement.description}</div>
+                `;
+                achievementsListElement.appendChild(achievementElement);
+            });
+        }
+        
+        function checkAchievements() {
+            let changed = false;
+            achievements.forEach(achievement => {
+                if (!achievement.unlocked && achievement.condition()) {
+                    achievement.unlocked = true;
+                    changed = true;
+                    showNotification(`Achievement Unlocked: ${achievement.name}!`);
+                }
+            });
+            if (changed) renderAchievements();
+        }
+        
+        function showNotification(message, type = 'normal') {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px';
+            notification.style.borderRadius = '10px';
+            notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            notification.style.zIndex = '1000';
+            notification.style.fontWeight = 'bold';
+            notification.style.animation = 'slideIn 0.5s ease-out';
+            
+            if (type === 'premium') {
+                notification.style.backgroundColor = '#ffd700';
+                notification.style.color = '#8b4513';
+                notification.style.border = '3px solid #daa520';
+                notification.classList.add('premium-notification');
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#f87171';
+                notification.style.color = '#7f1d1d';
+                notification.style.border = '3px solid #dc2626';
+            } else {
+                notification.style.backgroundColor = '#4cc9f0';
+                notification.style.color = '#1a1a2e';
+                notification.style.border = '3px solid #4361ee';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-in';
+                setTimeout(() => document.body.removeChild(notification), 500);
+            }, 3000);
+        }
+        
+        function createParticleEffect(x, y) {
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2 + Math.random() * 3;
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed;
+                
+                document.body.appendChild(particle);
+                
+                let posX = x;
+                let posY = y;
+                let opacity = 1;
+                
+                const animate = () => {
+                    posX += vx;
+                    posY += vy;
+                    opacity -= 0.02;
+                    
+                    particle.style.left = `${posX}px`;
+                    particle.style.top = `${posY}px`;
+                    particle.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        document.body.removeChild(particle);
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+        }
+        
+        function saveGame() {
+            const gameData = {
+                cookies,
+                totalCookies,
+                cookiesClicked,
+                upgrades,
+                upgradesOwned,
+                achievements,
+                gems,
+                adsWatchedToday,
+                activeBoosts,
+                hasUnlimitedBundle,
+                startTime,
+                savedAt: Date.now()
+            };
+            
+            localStorage.setItem('cookieClickerSave', JSON.stringify(gameData));
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('cookieClickerSave');
+            if (saved) {
+                try {
+                    const gameData = JSON.parse(saved);
+                    
+                    cookies = gameData.cookies || 0;
+                    totalCookies = gameData.totalCookies || 0;
+                    cookiesClicked = gameData.cookiesClicked || 0;
+                    upgradesOwned = gameData.upgradesOwned || 0;
+                    gems = gameData.gems || 0;
+                    adsWatchedToday = gameData.adsWatchedToday || 0;
+                    activeBoosts = gameData.activeBoosts || [];
+                    hasUnlimitedBundle = gameData.hasUnlimitedBundle || false;
+                    
+                    for (const category in upgrades) {
+                        if (gameData.upgrades && gameData.upgrades[category]) {
+                            upgrades[category].forEach((upgrade, index) => {
+                                if (gameData.upgrades[category][index]) {
+                                    upgrade.owned = gameData.upgrades[category][index].owned || 0;
+                                }
+                            });
+                        }
+                    }
+                    
+                    calculateClickPower();
+                    
+                    if (gameData.achievements) {
+                        achievements.forEach((achievement, index) => {
+                            if (gameData.achievements[index]) {
+                                achievement.unlocked = gameData.achievements[index].unlocked || false;
+                            }
+                        });
+                    }
+                    
+                    if (gameData.savedAt) {
+                        const timeSinceSave = Date.now() - gameData.savedAt;
+                        startTime = Date.now() - (gameData.savedAt - gameData.startTime);
+                        const secondsAway = timeSinceSave / 1000;
+                        calculateCPS();
+                        const cookiesGenerated = cookiesPerSecond * secondsAway;
+                        cookies += cookiesGenerated;
+                        totalCookies += cookiesGenerated;
+                    } else {
+                        startTime = gameData.startTime || Date.now();
+                    }
+                    
+                    // Apply golden cookie skin if unlimited bundle
+                    if (hasUnlimitedBundle) {
+                        cookieElement.classList.add('golden-cookie');
+                    }
+                    
+                    showNotification('Game loaded!');
+                } catch (e) {
+                    console.error('Error loading saved game:', e);
+                }
+            }
+        }
+        
+        function resetGame() {
+            if (confirm('Are you sure you want to reset your game? All progress will be lost!')) {
+                cookies = 0;
+                totalCookies = 0;
+                cookiesClicked = 0;
+                cookiesPerSecond = 0;
+                cookiesPerClick = 1;
+                clickMultiplier = 1;
+                upgradesOwned = 0;
+                gems = 0;
+                adsWatchedToday = 0;
+                activeBoosts = [];
+                hasUnlimitedBundle = false;
+                startTime = Date.now();
+                cookieElement.classList.remove('golden-cookie');
+                
+                for (const category in upgrades) {
+                    upgrades[category].forEach(upgrade => {
+                        upgrade.owned = 0;
+                    });
+                }
+                
+                achievements.forEach(achievement => {
+                    achievement.unlocked = false;
+                });
+                
+                localStorage.removeItem('cookieClickerSave');
+                
+                renderUpgrades();
+                renderAchievements();
+                updateDisplay();
+                updatePremiumDisplay();
+                
+                showNotification('Game reset!');
+            }
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+            return Math.floor(num).toLocaleString();
+        }
+        
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            
+            if (hours > 0) return `${hours}h ${minutes}m ${secs}s`;
+            else if (minutes > 0) return `${minutes}m ${secs}s`;
+            else return `${secs}s`;
+        }
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes clickAnimation {
+                0% { transform: scale(1); }
+                50% { transform: scale(0.9); }
+                100% { transform: scale(1); }
+            }
+            @keyframes superClickAnimation {
+                0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+                50% { transform: scale(0.85); box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+                100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+            }
+            @keyframes goldenGlow {
+                from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+                to { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+            }
+            @keyframes premiumPulse {
+                from { transform: scale(1); }
+                to { transform: scale(1.05); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Event listeners
+        cookieElement.addEventListener('click', (event) => {
+            cookies += cookiesPerClick;
+            totalCookies += cookiesPerClick;
+            cookiesClicked++;
+            
+            if (cookiesPerClick >= 100) {
+                cookieElement.classList.add('super-click');
+                setTimeout(() => cookieElement.classList.remove('super-click'), 300);
+                createParticleEffect(event.clientX, event.clientY);
+                createParticleEffect(event.clientX, event.clientY);
+                createParticleEffect(event.clientX, event.clientY);
+            } else {
+                cookieElement.classList.add('cookie-click');
+                setTimeout(() => cookieElement.classList.remove('cookie-click'), 100);
+            }
+            
+            createParticleEffect(event.clientX, event.clientY);
+            updateDisplay();
+            
+            if (cookiesClicked === 1) checkAchievements();
+        });
+        
+        saveButton.addEventListener('click', saveGame);
+        resetButton.addEventListener('click', resetGame);
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
